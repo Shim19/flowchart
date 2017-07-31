@@ -16,6 +16,8 @@
         var slopy, cosy, siny;
         var Par = 10.0;
         var x3, y3;
+	var textFontSize = 12;
+	var fontSize = textFontSize + "px";
         slopy = Math.atan2((y1 - y2), (x1 - x2));
         cosy = Math.cos(slopy);
         siny = Math.sin(slopy);
@@ -169,7 +171,7 @@
 
         var text1 = svg.append("g")
                 .attr("fill", "white")
-                .attr("font-size", "12px")
+                .attr("font-size", fontSize)
                 .attr("text-anchor", "middle")
                 .selectAll("text")
                 .data(data)
@@ -317,7 +319,7 @@
 
         var text2 = svg.append("g")
                         .attr("fill", "black")
-                        .attr("font-size", "12px")
+                        .attr("font-size", fontSize)
                         .attr("text-anchor", "middle")
                         .selectAll("text")
                         .data(data)
@@ -355,12 +357,9 @@
                         var j = data[id[d]].text.indexOf(d);
                         if (j != 0) {
                             var text = data[id[d]].text;
-                            return 0 - text[j - 1].length * 12;
+                            return 0 - text[j - 1].length * textFontSize;
                         }
                     }
-                })
-                .attr("textLength", function (d, i) {
-                    return d.length * 12;
                 })
                 .attr("dy", function (d) {
                     var j = data[id[d]].text.indexOf(d);
@@ -376,7 +375,7 @@
                 })
                 .attr("fill", "white")
                 .transition()
-				.duration(300)
+		.duration(300)
                 .delay(function (d) {
                     return delayTime * data[id[d]].sequence;
                 })
@@ -399,7 +398,7 @@
                 .attr("stroke", "white")
                 .transition()
                 .duration(300)
-				.delay(function (d) {
+		.delay(function (d) {
                     return delayTime * d.sequence;
                 })
                 .attr("stroke", "#FF8C00")
@@ -413,7 +412,7 @@
 
         var text3 = svg.append("g")
                 .attr("fill", "black")
-                .attr("font-size", "12px")
+                .attr("font-size", fontSize)
                 .attr("text-anchor", "middle")
                 .selectAll("text")
                 .data(data)
@@ -454,12 +453,9 @@
                         var j = data[id[d]].text.indexOf(d);
                         if (j != 0) {
                             var text = data[id[d]].text;
-                            return 0 - text[j - 1].length * 12;
+                            return 0 - text[j - 1].length * textFontSize;
                         }
                     }
-                })
-                .attr("textLength", function (d, i) {
-                    return d.length * 12;
                 })
                 .attr("dy", function (d) {
                     var j = data[id[d]].text.indexOf(d);
