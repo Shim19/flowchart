@@ -16,8 +16,6 @@
         var slopy, cosy, siny;
         var Par = 10.0;
         var x3, y3;
-	var textFontSize = 12;
-	var fontSize = textFontSize + "px";
         slopy = Math.atan2((y1 - y2), (x1 - x2));
         cosy = Math.cos(slopy);
         siny = Math.sin(slopy);
@@ -42,6 +40,8 @@
     var width = 1200,
             height = 600,
             cellSize = 100;
+	var textFontSize = 12;
+	var fontSize = textFontSize + "px";
 
     d3.csv("flowchart.csv", function (error, data) {
         if (error) return console.error(error);
