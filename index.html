@@ -166,7 +166,7 @@
                         })
                         // .delay(function(d) {return 300*d.sequence;
                         // })
-                        .attr("fill", "steelblue")
+                        .attr("fill", function(d){if (d.sequence<=9 or d.sequence=27 ) {return "steelblue";} else {return "#548B54"; })
 
                 ;
         var dx = 17, dy = 17;
@@ -194,7 +194,7 @@
                 .attr("dy", dy)
                 .text(function (d) {
                     if (d.cycle == "Y") {
-                        return d.text1;
+                        return d.text;
                     }
                 })
 
