@@ -6,9 +6,7 @@
     <title>ddd2</title>
 </head>
 <body>
-<!-- <script src="./d3.min.js"></script> -->
-<!--<script src="jquery.min.js"></script>-->
-<!--<script src="snap.svg-min.js"></script>-->
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
     function drawLineArrow(x1, y1, x2, y2) {
@@ -38,12 +36,10 @@
     //延迟时间单位
     var delayTime = 600;
     var width = 1200,
-            height = 600,
-            cellSize = 100;
-	var textFontSize = 12;
-	var fontSize = textFontSize + "px";
+        height = 600,
+        cellSize = 150;
 
-    d3.csv("flowchart.csv", function (error, data) {
+    d3.csv("flowchart_1.csv", function (error, data) {
         if (error) return console.error(error);
         console.log(data[1].text);
 
@@ -63,75 +59,7 @@
                         .append("g")
                         .attr("transform", "translate(" + (10) + "," + (30) + ")")
                 ;
-        // var rect = svg.append("g")
-        // .attr("fill", "none")
-        // .attr("stroke", "#ccc")
-        // .selectAll("rect")
-        // .data(data)
-        // .enter()
-        // .append("rect")
-        // .attr("width", cellSize)
-        // .attr("height", cellSize)
-        // .attr("x", function(d) {
-        // return cellSize* (d.row-1);
-        // })
-        // .attr("y", function(d) {
-        // return cellSize* (d.column-1); })
-        // var cycle = svg.append("g")
-        // .attr("fill", "steelblue")
-        // .selectAll("circle")
-        // .data(data)
-        // .enter()
-        // .append("circle")
-        // .attr("cx",function(d) {
-        // return cellSize* d.row-cellSize/2;
-        // })
-        // .attr("cy",function(d) {
-        // return cellSize* d.column-cellSize/2; })
-        // .attr("r",function(d) { if (d.cir=="Y") {return cellSize*0.3;} else { return;}
-        // })
-        // //绘制直线
-// var line =svg.append("g")
-        // .selectAll("line")
-        // .data(data)
-        // .enter()
-        // .append("line")
-        // .attr("x1",function(d){return cellSize* d.row-85})
-        // .attr("y1",function(d){return cellSize* d.column-cellSize/2})
-        // .attr("x2",function(d){return cellSize* d.row-20})
-        // .attr("y2",function(d){return cellSize* d.column-cellSize/2})
-        // .attr("stroke","#FF8C00")
-        // .attr("stroke-width",function(d){if(d.line=="Y"){return 3;} else {return 0;}})
-        // .attr("marker-end","url(#arrow)");
-        // var line =svg.append("g")
-        // .selectAll("line")
-        // .data(data)
-        // .enter()
-        // .append("line")
-        // .attr("y1",function(d){return cellSize* d.column-80})
-        // .attr("x1",function(d){return cellSize* d.row-cellSize/2})
-        // .attr("y2",function(d){return cellSize* d.column-20})
-        // .attr("x2",function(d){return cellSize* d.row-cellSize/2})
-        // .attr("stroke","#FF8C00")
-        // .attr("stroke-width",function(d){if(d.vertical=="Y"){return 3;} else {return 0;}})
-        // .attr("marker-end","url(#arrow)");
-        // var rect = svg.append("g")
-        // .attr("fill", "none")
-        // .attr("stroke", "#ccc")
-        // .selectAll("rect")
-        // .data(data)
-        // .enter()
-        // .append("rect")
-        // .attr("width", cellSize)
-        // .attr("height", function(d) {
-        // return d.height;
-        // })
-        // .attr("x", function(d) {
-        // return cellSize* (d.row-1);
-        // })
-        // .attr("y", function(d) {
-        // return d.y;
-        // })
+ 
         var cycle = svg.append("g")
                         .selectAll("circle")
                         .data(data)
@@ -171,8 +99,7 @@
 
         var text1 = svg.append("g")
                 .attr("fill", "white")
-                .attr("font-size", fontSize)
-                .attr("text-anchor", "middle")
+                .attr("font-size", "10px")
                 .selectAll("text")
                 .data(data)
                 .enter()
@@ -190,89 +117,68 @@
                 })
                 .attr("dx", dx)
                 .attr("dy", dy)
-                .text(function (d) {
-                    if (d.cycle == "Y") {
-                        return d.text;
+               ;
+		var sequence = {};
+        var id = {};
+        data.forEach(function (item) {
+            item.text.forEach(function (text) {
+                sequence[text] = item.sequence;
+                id[text] = item.ID - 1;
+            })
+        });		
+				
+            text1.selectAll("tspan")
+                .data(function (d, i) {
+                    if (data[i].cycle == "Y")
+                        return data[i].text;
+                    else return "";
+                })
+                .enter()
+                .append("tspan")
+                .attr("dx", function (d, i) {
+                    if (data[id[d]].text.length != 1) {
+                        var j = data[id[d]].text.indexOf(d);
+                        if (j != 0) {
+                            var text = data[id[d]].text;
+                            return 0 - text[j - 1].length * 12;
+                        }
                     }
                 })
-
-
-        var defs = svg.append("defs");
-
-        var arrowMarker = defs.append("marker")
-                .attr("id", "arrow")
-                .attr("markerUnits", "strokeWidth")
-                .attr("markerWidth", "12")
-                .attr("markerHeight", "12")
-                .attr("viewBox", "0 0 12 12")
-                .attr("refX", "6")
-                .attr("refY", "6")
-                .attr("orient", "auto");
-
-        var arrow_path = "M2,2 L10,6 L2,10 L6,6 L2,2";
-
-        arrowMarker.append("path")
-                .attr("d", arrow_path)
+                .attr("textLength", function (d, i) {
+                    return d.length * 12;
+                })
+                .attr("dy", function (d) {
+                    var j = data[id[d]].text.indexOf(d);
+                    console.log(d, data[id[d]].text, j);
+                    if (j == 0) {
+                        return 0 ;
+                    } else {
+                        return 12;
+                    }
+                })
+                .text(function (d) {
+                    return d;
+                })
                 .attr("fill", "white")
+				.attr("text-anchor", "middle")
                 .transition()
-                .attr("fill", "red")
-                .duration(300);
-//        arrowMarker.selectAll("path")
-//                .data(data)
-//                .enter()
-//                .append("path")
-//                .attr("d", arrow_path)
-//                .attr("fill", "red")
-//                .attr("x1", function (d) {
-//                    if (d.column == "1") {
-//                        return cellSize * d.row - 80;
-//                    } else {
-//                        return cellSize * d.row - 20;
-//                    }
-//                })
-//                .attr("y1", function (d) {
-//                    if (d.column == "2") {
-//                        return parseInt(d.y) + d.height * 0.75;
-//                    }
-//                    else {
-//                        return parseInt(d.y) + d.height / 2;
-//                    }
-//                })
-//                .attr("x2", function (d) {
-//                    if (d.column == "1") {
-//                        return cellSize * d.row - 20;
-//                    } else {
-//                        return cellSize * d.row - 80;
-//                    }
-//                })
-//                .attr("y2", function (d) {
-//                    if (d.column == "2") {
-//                        return parseInt(d.y) + d.height * 0.75;
-//                    }
-//                    else {
-//                        return parseInt(d.y) + d.height / 2;
-//                    }
-//                })
-//                .attr("stroke-width", function (d) {
-//                    return 0;
-//                    if (d.line == "Y") {
-//                        return 3;
-//                    } else {
-//                        return 0;
-//                    }
-//                })
-////                .attr("fill", "#FF8C00");
-//                .attr("fill", "red")
-//                .transition(function(){
-//                    return 3000;
-//                }).attr("stroke-width", 3);
+				.duration(300)
+                .delay(function (d) {
+                    return delayTime * data[id[d]].sequence;
+                })
+                ;
 
+				
+				
+				
+				
+				
+ 
 
         var line1 = svg.append("g")
                 .selectAll("line")
                 .data(data)
                 .enter()
-                //                .append("line")
                 .append("path")
                 .attr("d", function (d) {
                     var x1, x2, y1, y2;
@@ -308,18 +214,11 @@
                 })
                 .attr("stroke", "#FF8C00")
 
-        var sequence = {};
-        var id = {};
-        data.forEach(function (item) {
-            item.text.forEach(function (text) {
-                sequence[text] = item.sequence;
-                id[text] = item.ID - 1;
-            })
-        })
+        
 
         var text2 = svg.append("g")
                         .attr("fill", "black")
-                        .attr("font-size", fontSize)
+                        .attr("font-size", "12px")
                         .attr("text-anchor", "middle")
                         .selectAll("text")
                         .data(data)
@@ -357,9 +256,12 @@
                         var j = data[id[d]].text.indexOf(d);
                         if (j != 0) {
                             var text = data[id[d]].text;
-                            return 0 - text[j - 1].length * textFontSize;
+                            return 0 - text[j - 1].length * 12;
                         }
                     }
+                })
+                .attr("textLength", function (d, i) {
+                    return d.length * 12;
                 })
                 .attr("dy", function (d) {
                     var j = data[id[d]].text.indexOf(d);
@@ -375,7 +277,7 @@
                 })
                 .attr("fill", "white")
                 .transition()
-		.duration(300)
+				.duration(300)
                 .delay(function (d) {
                     return delayTime * data[id[d]].sequence;
                 })
@@ -398,7 +300,7 @@
                 .attr("stroke", "white")
                 .transition()
                 .duration(300)
-		.delay(function (d) {
+				.delay(function (d) {
                     return delayTime * d.sequence;
                 })
                 .attr("stroke", "#FF8C00")
@@ -412,7 +314,7 @@
 
         var text3 = svg.append("g")
                 .attr("fill", "black")
-                .attr("font-size", fontSize)
+                .attr("font-size", "12px")
                 .attr("text-anchor", "middle")
                 .selectAll("text")
                 .data(data)
@@ -426,19 +328,6 @@
                 })
                 .attr("dx", 130)
                 .attr("dy", 35)
-//                .text(function (d) {
-//                    if (d.vertical == "Y") {
-//                        return d.text1;
-//                    } else {
-//                        return;
-//                    }
-//                })
-//                .attr("fill", "white")
-//                .transition()
-//                .duration(function (d) {
-//                    return delayTime * d.sequence;
-//                })
-//                .attr("fill", "black");
 
         text3.selectAll("tspan")
                 .data(function (d, i) {
@@ -453,9 +342,12 @@
                         var j = data[id[d]].text.indexOf(d);
                         if (j != 0) {
                             var text = data[id[d]].text;
-                            return 0 - text[j - 1].length * textFontSize;
+                            return 0 - text[j - 1].length * 12;
                         }
                     }
+                })
+                .attr("textLength", function (d, i) {
+                    return d.length * 12;
                 })
                 .attr("dy", function (d) {
                     var j = data[id[d]].text.indexOf(d);
