@@ -41,7 +41,7 @@
 
     d3.csv("flowchart_2.csv", function (error, data) {
         if (error) return console.error(error);
-        console.log(data[1].text);n
+        console.log(data[1].text);
 
         for (var i = 0; i < data.length; i++) {
             data[i].text = data[i].text.split("|");
@@ -95,7 +95,7 @@
 					 else {return "#548B54";}})
 
                 ;
-        var dx = 17, dy = 17;
+        var dx = 20, dy = 20;
 
         var text1 = svg.append("g")
                 .attr("fill", "white")
@@ -153,15 +153,15 @@
                     if (j == 0) {
                         return 0 ;
                     } else {
-                        return 12;
+                        return 14;
                     }
                 })
                 .text(function (d) {
                     return d;
                 })
+				.attr("font-size", "12px")
                 .attr("fill", "white")
 				.attr("text-anchor", "middle")
-	      .attr("font-size", "12px")
                 .transition()
 				.duration(300)
                 .delay(function (d) {
