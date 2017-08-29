@@ -39,7 +39,7 @@
         height = 600,
         cellSize = 150;
 
-    d3.csv("flowchart_1.csv", function (error, data) {
+    d3.csv("flowchart.csv", function (error, data) {
         if (error) return console.error(error);
         console.log(data[1].text);
 
