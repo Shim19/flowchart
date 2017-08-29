@@ -152,7 +152,7 @@
                     }
                 })
                 .attr("textLength", function (d, i) {
-                    return d.length * 12;
+                    return d.length * 14;
                 })
                 .attr("dy", function (d) {
                     var j = data[id[d]].text.indexOf(d);
@@ -160,7 +160,7 @@
                     if (j == 0) {
                         return 0 ;
                     } else {
-                        return 14;
+                        return 16;
                     }
                 })
                 .text(function (d) {
