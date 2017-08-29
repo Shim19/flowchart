@@ -39,9 +39,9 @@
         height = 600,
         cellSize = 150;
 
-    d3.csv("flowchart.csv", function (error, data) {
+    d3.csv("flowchart_2.csv", function (error, data) {
         if (error) return console.error(error);
-        console.log(data[1].text);
+        console.log(data[1].text);n
 
         for (var i = 0; i < data.length; i++) {
             data[i].text = data[i].text.split("|");
